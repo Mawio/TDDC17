@@ -192,7 +192,7 @@ class MyAgentProgram implements AgentProgram {
 		state.printWorldDebug();
 
 		// Our code begins here
-		var cur = new Node(state.agent_x_position, state.agent_y_position);
+		Node cur = new Node(state.agent_x_position, state.agent_y_position);
 
 		// Action selection begins here
 		if (dirt) {
@@ -208,10 +208,10 @@ class MyAgentProgram implements AgentProgram {
 
 		// If we discovered (either moved or bumped) select a new target node
 		if (cur.equals(targetNode) || bump) {
-			var next = getNextNode(cur);
+			Node next = getNextNode(cur);
 
 			// If we moved, add the last position to the tail
-			var moved = !cur.equals(lastPosition);
+			boolean moved = !cur.equals(lastPosition);
 			if (moved && !backtrack && lastPosition != null) {
 				tail.push(lastPosition);
 			}
@@ -237,7 +237,7 @@ class MyAgentProgram implements AgentProgram {
 			System.out.println("Backtracking to " + targetNode);
 		}
 
-		var action = getAction(cur, targetNode);
+		Action action = getAction(cur, targetNode);
 		// Update the agent direction
 		if (action == LIUVacuumEnvironment.ACTION_TURN_LEFT) {
 			state.agent_direction = ((state.agent_direction - 1) % 4);
@@ -254,13 +254,13 @@ class MyAgentProgram implements AgentProgram {
 	// If there are no adjacent nodes, null is returned instead
 	// Nodes are returned in order NORTH > EAST > SOUTH > WEST
 	private Node getNextNode(Node cur) {
-		var north = new Node(cur, MyAgentState.NORTH);
-		var east = new Node(cur, MyAgentState.EAST);
-		var south = new Node(cur, MyAgentState.SOUTH);
-		var west = new Node(cur, MyAgentState.WEST);
+		Node north = new Node(cur, MyAgentState.NORTH);
+		Node east = new Node(cur, MyAgentState.EAST);
+		Node south = new Node(cur, MyAgentState.SOUTH);
+		Node west = new Node(cur, MyAgentState.WEST);
 
-		var nodes = new Node[] { north, east, south, west };
-		for (var node : nodes) {
+		Node[] nodes = new Node[] { north, east, south, west };
+		for (Node node : nodes) {
 			if (!node.isDiscovered(state.world)) {
 				System.out.println("Next undiscovered node " + node);
 				return node;
@@ -271,8 +271,8 @@ class MyAgentProgram implements AgentProgram {
 
 	// Returns the action to take in order to reach a target node from the current node
 	private Action getAction(Node cur, Node target) {
-		var desiredDirection = directionToNode(cur, target);
-		var directionDiff = state.agent_direction - desiredDirection;
+		int desiredDirection = directionToNode(cur, target);
+		int directionDiff = state.agent_direction - desiredDirection;
 		if (directionDiff == 0) {
 			state.agent_last_action = state.ACTION_MOVE_FORWARD;
 			return LIUVacuumEnvironment.ACTION_MOVE_FORWARD;
@@ -345,7 +345,7 @@ class Node {
 		if (!(obj instanceof Node)) {
 			return false;
 		}
-		var other = (Node)obj;
+		Node other = (Node)obj;
 		return other.x == this.x && other.y == this.y;
 	}
 }
