@@ -193,7 +193,6 @@ class MyAgentProgram implements AgentProgram {
 
 		// Our code begins here
 		var cur = new Node(state.agent_x_position, state.agent_y_position);
-		lastPosition = cur;
 
 		// Action selection begins here
 		if (dirt) {
@@ -210,7 +209,12 @@ class MyAgentProgram implements AgentProgram {
 		// If we discovered (either moved or bumped) select a new target node
 		if (cur.equals(targetNode) || bump) {
 			var next = getNextNode(cur);
-			var last = targetNode;
+
+			// If we moved, add the last position to the tail
+			var moved = !cur.equals(lastPosition);
+			if (moved && !backtrack && lastPosition != null) {
+				tail.push(lastPosition);
+			}
 
 			if (next == null && tail.empty()) {
 				// Go home
@@ -225,17 +229,12 @@ class MyAgentProgram implements AgentProgram {
 				backtrack = false;
 				targetNode = next;
 			}
-
-			// If we moved, add the last position to the tail
-			var moved = cur.equals(last);
-			if (moved && !backtrack) {
-				tail.push(lastPosition);
-			}
-			System.out.println("Selected new target node: " + targetNode);
+			System.out.println("Selected new target node " + targetNode);
 		}
+		lastPosition = cur;
 
 		if (backtrack) {
-			System.out.println("BACKTRACKING TO " + targetNode);
+			System.out.println("Backtracking to " + targetNode);
 		}
 
 		var action = getAction(cur, targetNode);
@@ -343,6 +342,9 @@ class Node {
 
 	@Override
 	public boolean equals(Object obj) {
+		if (!(obj instanceof Node)) {
+			return false;
+		}
 		var other = (Node)obj;
 		return other.x == this.x && other.y == this.y;
 	}
