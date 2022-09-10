@@ -209,12 +209,9 @@ class MyAgentProgram implements AgentProgram {
 
 		// If we discovered (either moved or bumped) select a new target node
 		if (cur.equals(targetNode) || bump) {
-			var moved = cur.equals(targetNode);
-			if (moved && !backtrack) {
-				tail.push(lastPosition);
-			}
-
 			var next = getNextNode(cur);
+			var last = targetNode;
+
 			if (next == null && tail.empty()) {
 				// Go home
 				walkingHome = true;
@@ -228,7 +225,17 @@ class MyAgentProgram implements AgentProgram {
 				backtrack = false;
 				targetNode = next;
 			}
+
+			// If we moved, add the last position to the tail
+			var moved = cur.equals(last);
+			if (moved && !backtrack) {
+				tail.push(lastPosition);
+			}
 			System.out.println("Selected new target node: " + targetNode);
+		}
+
+		if (backtrack) {
+			System.out.println("BACKTRACKING TO " + targetNode);
 		}
 
 		var action = getAction(cur, targetNode);
@@ -339,5 +346,4 @@ class Node {
 		var other = (Node)obj;
 		return other.x == this.x && other.y == this.y;
 	}
-
 }
