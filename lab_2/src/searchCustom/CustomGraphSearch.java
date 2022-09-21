@@ -34,25 +34,29 @@ public class CustomGraphSearch implements SearchObject {
 		explored = new HashSet<SearchNode>();
 		// The start state is given
 		GridPos startState = (GridPos) p.getInitialState();
-		// Initialize the frontier with the start state  
-		SearchNode node = new SearchNode(startState);
-		frontier.addNodeToFront(node);
-
 		// Path will be empty until we find the goal.
 		path = new ArrayList<SearchNode>();
 		
-		// Implement this!
+		// Our code begins here
+		SearchNode node = new SearchNode(startState);
+		if (p.isGoalState(node.getState())) {
+			path.add(node);
+			return path;
+		}
+
+		frontier.addNodeToFront(node);
 		explored.add(node);
 		
 		while(!frontier.isEmpty()) {
 			node = frontier.removeFirst();
-			if(p.isGoalState(node.getState())) {
-				path = node.getPathFromRoot();
-				break;
-			}
+			for(GridPos s : p.getReachableStatesFrom(node.getState())) {
+				SearchNode child = new SearchNode(s, node);
+
+				if(p.isGoalState(s)) {
+					path = child.getPathFromRoot();
+					return path;
+				}
 			
-			for(GridPos pos : p.getReachableStatesFrom(node.getState())) {
-				SearchNode child = new SearchNode(pos, node);
 				if(!explored.contains(child)) {
 					explored.add(child);
 					if(insertFront) {
@@ -61,10 +65,8 @@ public class CustomGraphSearch implements SearchObject {
 						frontier.addNodeToBack(child);
 					}
 				}
-				
 			}
 		}
-		
 		
 		/* Some hints:
 		 * -Read early part of chapter 3 in the book!
