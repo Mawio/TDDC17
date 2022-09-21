@@ -58,40 +58,17 @@ public class CustomGraphSearch implements SearchObject {
 				}
 			
 				if(!explored.contains(child)) {
+					
 					explored.add(child);
 					if(insertFront) {
 						frontier.addNodeToFront(child);
 					} else {
 						frontier.addNodeToBack(child);
 					}
+					
 				}
 			}
 		}
-		
-		/* Some hints:
-		 * -Read early part of chapter 3 in the book!
-		 * -You are free to change anything how you wish as long as the program runs, but some structure is given to help you.
-		 * -You can Google for "javadoc <class>" if you are uncertain of what you can do with a particular Java type.
-		 * 
-		 * -SearchNodes are the nodes of the search tree and contains the relevant problem state, in this case x,y position (GridPos) of the agent 
-		 * --You can create a new search node from a state by: SearchNode childNode = new SearchNode(childState, currentNode);
-		 * --You can also extract the state by .getState() method
-		 * --All search structures use search nodes, but the problem object only speaks in state, so you may need to convert between them 
-		 * 
-		 * -The frontier is a queue of search nodes, open this class to find out what you can do with it! 
-		 * 
-		 * -If you are unfamiliar with Java, the "HashSet<SearchNode>" used for the explored set means a set of SearchNode objects.
-		 * --You can add nodes to the explored set, or check if it contains a node!
-		 * 
-		 * -To get the child states (adjacent grid positions that are not walls) of a particular search node, do: ArrayList<GridPos> childStates = p.getReachableStatesFrom(currentState);
-		 * 
-		 * -Depending on the addNodesToFront boolean variable, you may need to do something with the frontier... (see book)
-		 * 
-		 * -You can check if you have reached the goal with p.isGoalState(NodeState)
-		 * 
-		 *  When the goal is found, the path to be returned can be found by: path = node.getPathFromRoot();
-		 */
-		/* Note: Returning an empty path signals that no path exists */
 		return path;
 	}
 
