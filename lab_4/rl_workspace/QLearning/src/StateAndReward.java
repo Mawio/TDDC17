@@ -20,7 +20,7 @@ public class StateAndReward {
 	/* State discretization function for the full hover controller */
 	public static String getStateHover(double angle, double vx, double vy) {
 
-		String state = discretize(angle, 15, -Math.PI, Math.PI) + "," + discretize(vx, 10, -5, 5) + "," + discretize(vy, 10, -5, 5);
+		String state = discretize(angle, 20, -Math.PI, Math.PI) + "," + discretize(vy, 20, -5, 5);
 		
 		return state;
 	}
@@ -31,8 +31,15 @@ public class StateAndReward {
 		double reward = 0;
 
 		reward+= -Math.pow(2,Math.abs(angle));
-		reward+= -Math.pow(2,Math.abs(vx));
-		reward+= -Math.pow(1.5,Math.abs(vy));
+		reward+= -Math.pow(10,Math.abs(vy));
+
+                if (Math.abs(vy) < 0.03) {
+                    reward += 1000;
+                }
+
+                if (Math.abs(vx) < 0.03) {
+                    reward += 500;
+                }
 		
 		return reward;
 	}
