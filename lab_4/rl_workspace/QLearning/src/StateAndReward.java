@@ -3,35 +3,29 @@ public class StateAndReward {
 	
 	/* State discretization function for the angle controller */
 	public static String getStateAngle(double angle, double vx, double vy) {
-		
 		String state = discretize(angle, 15, -Math.PI, Math.PI) + "," + discretize(vx, 10, -5, 5) + "," + discretize(vy, 10, -5, 5);
-		
 		return state;
 	}
 
 	/* Reward function for the angle controller */
 	public static double getRewardAngle(double angle, double vx, double vy) {
-		
-		double reward = -Math.pow(2,Math.abs(angle)); //-(Math.abs(vx) + Math.abs(vy));
+		double reward = -Math.pow(2,Math.abs(angle));
 		if(Math.abs(angle) < 0.05) reward+=50;
 		return reward;
 	}
 
 	/* State discretization function for the full hover controller */
 	public static String getStateHover(double angle, double vx, double vy) {
-
 		String state = discretize(angle, 20, -Math.PI, Math.PI) + "," + discretize(vy, 20, -5, 5);
-		
 		return state;
 	}
 
 	/* Reward function for the full hover controller */
 	public static double getRewardHover(double angle, double vx, double vy) {
-		
 		double reward = 0;
-
 		reward+= -Math.pow(2,Math.abs(angle));
 		reward+= -Math.pow(10,Math.abs(vy));
+		reward+= -Math.pow(2,Math.abs(vx));
 
                 if (Math.abs(vy) < 0.03) {
                     reward += 1000;
