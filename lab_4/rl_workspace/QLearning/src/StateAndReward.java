@@ -3,21 +3,17 @@ public class StateAndReward {
 	
 	/* State discretization function for the angle controller */
 	public static String getStateAngle(double angle, double vx, double vy) {
-
-		/* TODO: IMPLEMENT THIS FUNCTION */
-
-		String state = "OneStateToRuleThemAll";
+		
+		String state = discretize(angle, 30, -Math.PI, Math.PI) + "," + discretize(vx, 20, -5, 5) + "," + discretize(vy, 20, -5, 5);
 		
 		return state;
 	}
 
 	/* Reward function for the angle controller */
 	public static double getRewardAngle(double angle, double vx, double vy) {
-
-		/* TODO: IMPLEMENT THIS FUNCTION */
 		
-		double reward = 0;
-
+		double reward = -Math.pow(2,Math.abs(angle)); //-(Math.abs(vx) + Math.abs(vy));
+		if(Math.abs(angle) < 0.1) reward+=50;
 		return reward;
 	}
 

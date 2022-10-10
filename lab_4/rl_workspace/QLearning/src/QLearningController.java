@@ -1,6 +1,7 @@
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.Random;
 
@@ -24,7 +25,7 @@ public class QLearningController extends Controller {
 	RocketEngine middleEngine;
 	RocketEngine rightEngine;
 
-	final static int NUM_ACTIONS = 7; /* The takeAction function must be changed if this is modified */
+	final static int NUM_ACTIONS = 2; /* The takeAction function must be changed if this is modified */
 	
 	/* Keep track of the previous state and action */
 	String previous_state = null;
@@ -86,10 +87,47 @@ public class QLearningController extends Controller {
 	void performAction(int action) {
 
 		/* Fire zeh rockets! */
-		/* TODO: Remember to change NUM_ACTIONS constant to reflect the number of actions (including 0, no action) */
+
+		resetRockets();
 		
-		/* TODO: IMPLEMENT THIS FUNCTION */
+		switch(action) {
 		
+//		case 0:
+//			break;
+//		case 1:
+//			leftEngine.setBursting(true);
+//			break;
+//		case 2:
+//			middleEngine.setBursting(true);
+//			break;
+//		case 3:
+//			rightEngine.setBursting(true);
+//			break;
+//		case 4:
+//			leftEngine.setBursting(true);
+//			middleEngine.setBursting(true);
+//			break;
+//		case 5:
+//			leftEngine.setBursting(true);
+//			rightEngine.setBursting(true);
+//			break;		
+//		case 6:
+//			middleEngine.setBursting(true);
+//			rightEngine.setBursting(true);
+//			break;
+//		case 7:
+//			leftEngine.setBursting(true);
+//			middleEngine.setBursting(true);
+//			rightEngine.setBursting(true);	
+//		}
+//		
+		case 0:
+			leftEngine.setBursting(true);
+			break;
+		case 1:
+			rightEngine.setBursting(true);
+			break;
+		}
 	}
 
 	/* Main decision loop. Called every iteration by the simulator */
@@ -121,13 +159,25 @@ public class QLearningController extends Controller {
 				/* Update Q value */
 				if (Qtable.get(prev_stateaction) == null) {
 					Qtable.put(prev_stateaction, 0.0);
-				} 
+				}
 
+				String state_max = new_state + 0;
+				double max = Qtable.getOrDefault(state_max, 0.0);
 				
-				/* TODO: IMPLEMENT Q-UPDATE HERE! */
+				for (int i = 1; i < QLearningController.NUM_ACTIONS; i++) {
+					String state = new_state + i;
+					double q = Qtable.getOrDefault(state, 0.0);
+					if (q > max) {
+						max = q;
+						state_max = state;
+					}
+				}
+				double temp = Qtable.get(prev_stateaction) + 
+						alpha(Ntable.get(prev_stateaction))*(previous_reward + GAMMA_DISCOUNT_FACTOR*max - Qtable.get(prev_stateaction));
+				
+				Qtable.put(prev_stateaction, temp);
 				
 				/* See top for constants and below for helper functions */
-				
 				
 				int action = selectAction(new_state); /* Make sure you understand how it selects an action */
 
